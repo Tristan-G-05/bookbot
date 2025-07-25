@@ -6,15 +6,32 @@ from stats import get_num_words
 
 from stats import get_num_letters
 
-def main():
-    book_text = get_book_text('books/frankenstein.txt')
-    count = f"{get_num_words(book_text)} words found in the document"
-    letter_count = get_num_letters(book_text)
-    print(count)
-    for key in sorted(letter_count.keys()):
-        print(f"'{key}': {letter_count[key]}")
+from stats import sort_character_counts
 
-main()
+import sys
+
+if len(sys.argv) != 2:
+    print("Usage: python3 main.py <path_to_book>")
+    sys.exit(1)
+
+def main():
+    book_text = get_book_text(sys.argv[1])
+    letter_count = get_num_letters(book_text)
+    sorted_counts = sort_character_counts(letter_count)
+    
+    book_found = f"Analyzing book found at {sys.argv[1]}"
+    print("============ BOOKBOT ============")
+    print(book_found)
+    print("----------- Word Count ----------")
+    print(f"Found {get_num_words(book_text)} total words")
+    print("--------- Character Count -------")
+    for item in sorted_counts:
+        if item["char"].isalpha():
+            print(f"{item['char']}: {item['num']}")
+    print("============= END ===============")
+
+if __name__ == "__main__":
+    main()
 # This is a simple script to read and print the contents of a book file.
 # It assumes the book file is located in the 'books' directory.
 # The function get_book_text reads the file and returns its content.
